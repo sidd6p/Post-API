@@ -1,12 +1,33 @@
+import psycopg2
+import os
+
 from typing import Optional
 from fastapi import FastAPI, Response, status, HTTPException
 from pydantic import BaseModel
 from random import randrange
+from dotenv import load_dotenv
+from psycopg2.extras import RealDictCursor
 
+
+load_dotenv()
 
 app = FastAPI()
 
 my_posts = dict()
+
+try:
+    conn = psycopg2.connect(
+        host=os.getenv("HOST"),
+        database=os.getenv("DATABASE"),
+        user=os.getenv("USER"),
+        password=os.getenv("PASSWORD"),
+        cursor_factory=RealDictCursor,
+    )
+    cursor = conn.cursor()
+    print("Database connected!")
+except Exception as error:
+    print(f"Database connection failed: {error}")
+
 
 class Post(BaseModel):
     title: str
@@ -22,11 +43,13 @@ def insert_post(data):
     my_posts[id] = post_dict
     return post_dict
 
+
 def search_post_by_id(id):
     if id in my_posts:
         return my_posts[id]
     else:
         return None
+
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def root():
@@ -48,7 +71,10 @@ async def set_post(post: Post):
 async def get_post(id: int):
     post = search_post_by_id(id)
     if post is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post with id: {id} not found!",
+        )
     else:
         return {"data": post}
 
@@ -57,7 +83,10 @@ async def get_post(id: int):
 async def delete_post(id: int):
     post = search_post_by_id(id)
     if post is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post with id: {id} not found!",
+        )
     else:
         del my_posts[id]
         return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -67,7 +96,10 @@ async def delete_post(id: int):
 async def update_post(id: int, updated_post: Post):
     post = search_post_by_id(id)
     if post is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post with id: {id} not found!",
+        )
     else:
         my_posts[id] = updated_post
         return {"data": update_post}
