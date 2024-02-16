@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import time
 
 from typing import Optional
 from fastapi import FastAPI, Response, status, HTTPException
@@ -15,18 +16,22 @@ app = FastAPI()
 
 my_posts = dict()
 
-try:
-    conn = psycopg2.connect(
-        host=os.getenv("HOST"),
-        database=os.getenv("DATABASE"),
-        user=os.getenv("USER"),
-        password=os.getenv("PASSWORD"),
-        cursor_factory=RealDictCursor,
-    )
-    cursor = conn.cursor()
-    print("Database connected!")
-except Exception as error:
-    print(f"Database connection failed: {error}")
+
+while True:
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("HOST"),
+            database=os.getenv("DATABASE"),
+            user=os.getenv("USER"),
+            password=os.getenv("PASSWORD"),
+            cursor_factory=RealDictCursor,
+        )
+        cursor = conn.cursor()
+        print("Database connected!")
+        break
+    except Exception as error:
+        print(f"Database connection failed: {error}")
+        time.sleep(2)
 
 
 class Post(BaseModel):
