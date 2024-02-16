@@ -39,13 +39,13 @@ async def get_posts():
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-async def set_posts(post: Post):
+async def set_post(post: Post):
     post_dict = insert_post(post)
     return {"data": post_dict}
 
 
 @app.get("/posts/{id}", status_code=status.HTTP_200_OK)
-async def get_posts_by_id(id: int):
+async def get_post(id: int):
     post = search_post_by_id(id)
     if post is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
@@ -54,10 +54,20 @@ async def get_posts_by_id(id: int):
 
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_post_by_id(id: int):
+async def delete_post(id: int):
     post = search_post_by_id(id)
     if post is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
     else:
         del my_posts[id]
         return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.put("/posts/{id}", status_code=status.HTTP_200_OK)
+async def update_post(id: int, updated_post: Post):
+    post = search_post_by_id(id)
+    if post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {id} not found!")
+    else:
+        my_posts[id] = updated_post
+        return {"data": update_post}
