@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/407019",
+					"raw": "http://127.0.0.1:8000/posts/992713",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -64,7 +64,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"407019"
+						"992713"
 					]
 				}
 			},
@@ -76,7 +76,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/407019",
+					"raw": "http://127.0.0.1:8000/posts/452229",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -87,7 +87,39 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"407019"
+						"452229"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update by ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Updated Post 1\",\r\n    \"content\": \"Updated This is Post 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/posts/992713",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"posts",
+						"992713"
 					]
 				}
 			},
