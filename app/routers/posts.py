@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import status, HTTPException, Depends, Response, APIRouter
 from sqlalchemy.orm import Session
-from .. import schemas, models, database
+from .. import schemas, models, database, oauth2
 
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
@@ -18,7 +18,11 @@ async def get_posts(db: Session = Depends(database.get_db)):
 @router.post(
     "/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse
 )
-async def set_post(post: schemas.PostCreate, db: Session = Depends(database.get_db)):
+async def set_post(
+    post: schemas.PostCreate,
+    db: Session = Depends(database.get_db),
+    user_id: int = Depends(oauth2.get_current_user),
+):
     new_post = models.Post(**post.model_dump())
     db.add(new_post)
     db.commit()
@@ -44,7 +48,10 @@ async def get_post(id: int, db: Session = Depends(database.get_db)):
     "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
 )
 async def update_post(
-    id: int, updated_post: schemas.PostUpdate, db: Session = Depends(database.get_db)
+    id: int,
+    updated_post: schemas.PostUpdate,
+    db: Session = Depends(database.get_db),
+    user_id: int = Depends(oauth2.get_current_user),
 ):
     post = db.query(models.Post).filter(models.Post.id == id)
 
@@ -60,7 +67,11 @@ async def update_post(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_post(id: int, db: Session = Depends(database.get_db)):
+async def delete_post(
+    id: int,
+    db: Session = Depends(database.get_db),
+    user_id: int = Depends(oauth2.get_current_user),
+):
     post = db.query(models.Post).filter(models.Post.id == id)
 
     if post.first() is None:

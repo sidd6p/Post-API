@@ -40,4 +40,4 @@ class AccessTokenBase(BaseModel):
 
 
 class TokenDataBase(BaseModel):
-    id: Optional[str] = None
+    id: Optional[int] = None
