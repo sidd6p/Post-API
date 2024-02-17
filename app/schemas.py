@@ -30,3 +30,4 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     created_at: datetime
+    id: int
