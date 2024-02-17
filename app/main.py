@@ -1,15 +1,14 @@
-import psycopg2
-import time
-import os
-
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from .database import engine, get_db
 from sqlalchemy.orm import Session
 from . import models
 from . import schemas
 from dotenv import load_dotenv
-from psycopg2.extras import RealDictCursor
 from typing import List
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -104,6 +103,7 @@ async def set_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
             detail=f"User with emai: {user.email} alreay exists",
         )
     else:
+        user.password = pwd_context.hash(user.password)
         new_user = models.User(**user.model_dump())
         db.add(new_user)
         db.commit()

@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/992713",
+					"raw": "http://127.0.0.1:8000/posts/7",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -64,7 +64,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"992713"
+						"7"
 					]
 				}
 			},
@@ -76,7 +76,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/452229",
+					"raw": "http://127.0.0.1:8000/posts/5",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -87,7 +87,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"452229"
+						"5"
 					]
 				}
 			},
@@ -100,7 +100,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Updated Post 1\",\r\n    \"content\": \"Updated This is Post 1\"\r\n}",
+					"raw": "{\r\n    \"title\": \"Updated Post 8\",\r\n    \"content\": \"Updated This is Post 111\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -108,7 +108,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/992713",
+					"raw": "http://127.0.0.1:8000/posts/13",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -119,7 +119,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"992713"
+						"13"
 					]
 				}
 			},
@@ -132,7 +132,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Post 1\",\r\n    \"content\": \"This is Post 1\",\r\n    \"publish\": false,\r\n    \"rating\": 2\r\n}",
+					"raw": "{\r\n    \"title\": \"Post 1\",\r\n    \"content\": \"This is Post 23\",\r\n    \"published\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -151,6 +151,37 @@
 					"port": "8000",
 					"path": [
 						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"s@gmail.com\",\r\n    \"password\": \"This is Post 23\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users"
 					]
 				}
 			},
