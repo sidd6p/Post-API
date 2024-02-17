@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 from .. import schemas, models, utils, database
 
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post(
-    "/users", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse
+    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse
 )
 async def set_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     new_user = db.query(models.User).filter(models.User.email == user.email)
@@ -27,7 +27,7 @@ async def set_user(user: schemas.UserCreate, db: Session = Depends(database.get_
 
 
 @router.get(
-    "/users/{id}", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
+    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
 )
 async def get_users(id: int, db: Session = Depends(database.get_db)):
     user = db.query(models.User).filter(models.User.id == id).first()

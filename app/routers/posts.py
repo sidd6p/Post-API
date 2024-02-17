@@ -4,11 +4,11 @@ from sqlalchemy.orm import Session
 from .. import schemas, models, database
 
 
-router = APIRouter()
+router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
 @router.get(
-    "/posts", status_code=status.HTTP_200_OK, response_model=List[schemas.PostResponse]
+    "/", status_code=status.HTTP_200_OK, response_model=List[schemas.PostResponse]
 )
 async def get_posts(db: Session = Depends(database.get_db)):
     posts = db.query(models.Post).all()
@@ -16,7 +16,7 @@ async def get_posts(db: Session = Depends(database.get_db)):
 
 
 @router.post(
-    "/posts", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse
+    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse
 )
 async def set_post(post: schemas.PostCreate, db: Session = Depends(database.get_db)):
     new_post = models.Post(**post.model_dump())
@@ -27,7 +27,7 @@ async def set_post(post: schemas.PostCreate, db: Session = Depends(database.get_
 
 
 @router.get(
-    "/posts/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
+    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
 )
 async def get_post(id: int, db: Session = Depends(database.get_db)):
     post = db.query(models.Post).filter(models.Post.id == id).first()
@@ -41,7 +41,7 @@ async def get_post(id: int, db: Session = Depends(database.get_db)):
 
 
 @router.put(
-    "/posts/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
+    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
 )
 async def update_post(
     id: int, updated_post: schemas.PostUpdate, db: Session = Depends(database.get_db)
@@ -59,7 +59,7 @@ async def update_post(
         return post.first()
 
 
-@router.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(id: int, db: Session = Depends(database.get_db)):
     post = db.query(models.Post).filter(models.Post.id == id)
 
