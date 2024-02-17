@@ -20,23 +20,6 @@ app = FastAPI()
 my_posts = dict()
 
 
-while True:
-    try:
-        conn = psycopg2.connect(
-            host=os.getenv("HOST"),
-            database=os.getenv("DATABASE"),
-            user=os.getenv("USER"),
-            password=os.getenv("PASSWORD"),
-            cursor_factory=RealDictCursor,
-        )
-        cursor = conn.cursor()
-        print("Database connected!")
-        break
-    except Exception as error:
-        print(f"Database connection failed: {error}")
-        time.sleep(2)
-
-
 @app.get("/", status_code=status.HTTP_200_OK)
 async def root():
     return {"message": "Hello World!"}
@@ -107,3 +90,22 @@ async def update_post(
         post.update(updated_post.model_dump(), synchronize_session=False)
         db.commit()
         return post.first()
+
+
+@app.post(
+    "/users", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse
+)
+async def set_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    new_user = db.query(models.User).filter(models.User.email == user.email)
+
+    if new_user.first() is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"User with emai: {user.email} alreay exists",
+        )
+    else:
+        new_user = models.User(**user.model_dump())
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user

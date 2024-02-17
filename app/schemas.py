@@ -18,3 +18,15 @@ class PostUpdate(PostBase):
 
 class PostResponse(PostBase):
     created_at: datetime
+
+
+class UserBase(BaseModel):
+    email: str
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserResponse(UserBase):
+    created_at: datetime
