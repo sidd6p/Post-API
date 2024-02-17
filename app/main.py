@@ -37,23 +37,8 @@ while True:
 class Post(BaseModel):
     title: str
     content: str
-    publish: bool = True
+    published: bool = True
     rating: Optional[int] = None
-
-
-def insert_post(data):
-    post_dict = data.model_dump()
-    id = randrange(1, 1000000)
-    post_dict["id"] = id
-    my_posts[id] = post_dict
-    return post_dict
-
-
-def search_post_by_id(id):
-    if id in my_posts:
-        return my_posts[id]
-    else:
-        return None
 
 
 @app.get("/", status_code=status.HTTP_200_OK)
@@ -63,18 +48,30 @@ async def root():
 
 @app.get("/posts", status_code=status.HTTP_200_OK)
 async def get_posts():
-    return {"data": my_posts}
+    cursor.execute("""SELECT * FROM posts""")
+    posts = cursor.fetchall()
+    return {"data": posts}
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 async def set_post(post: Post):
-    post_dict = insert_post(post)
-    return {"data": post_dict}
+    cursor.execute(
+        """ INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """,
+        (
+            post.title,
+            post.content,
+            post.published,
+        ),
+    )
+    new_post = cursor.fetchone()
+    conn.commit()
+    return {"data": new_post}
 
 
 @app.get("/posts/{id}", status_code=status.HTTP_200_OK)
 async def get_post(id: int):
-    post = search_post_by_id(id)
+    cursor.execute(""" SELECT * FROM posts WHERE posts.id = %s """, (str(id),))
+    post = cursor.fetchone()
     if post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -86,25 +83,37 @@ async def get_post(id: int):
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(id: int):
-    post = search_post_by_id(id)
-    if post is None:
+    cursor.execute(
+        """ DELETE FROM posts WHERE posts.id = %s  RETURNING *""", (str(id),)
+    )
+    deleted_post = cursor.fetchone()
+    if deleted_post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post with id: {id} not found!",
         )
     else:
-        del my_posts[id]
+        conn.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.put("/posts/{id}", status_code=status.HTTP_200_OK)
 async def update_post(id: int, updated_post: Post):
-    post = search_post_by_id(id)
-    if post is None:
+    cursor.execute(
+        """ UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING * """,
+        (
+            updated_post.title,
+            updated_post.content,
+            updated_post.published,
+            str(id),
+        ),
+    )
+    updated_post = cursor.fetchone()
+    if updated_post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post with id: {id} not found!",
         )
     else:
-        my_posts[id] = updated_post
-        return {"data": update_post}
+        conn.commit()
+        return {"data": updated_post}
