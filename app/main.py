@@ -5,10 +5,8 @@ from . import models
 from . import schemas
 from dotenv import load_dotenv
 from typing import List
-from passlib.context import CryptContext
+from . import utils
 
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -103,9 +101,24 @@ async def set_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
             detail=f"User with emai: {user.email} alreay exists",
         )
     else:
-        user.password = pwd_context.hash(user.password)
+        user.password = utils.hash_password(user.password)
         new_user = models.User(**user.model_dump())
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
         return new_user
+
+
+@app.get(
+    "/users/{id}", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
+)
+async def get_users(id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == id).first()
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id: {id} not found",
+        )
+    else:
+        return user
