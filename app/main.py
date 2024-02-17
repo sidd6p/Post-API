@@ -1,14 +1,17 @@
 import psycopg2
-import os
 import time
+import os
 
 from typing import Optional
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from pydantic import BaseModel
-from random import randrange
+from .database import engine, get_db
+from sqlalchemy.orm import Session
+from . import model
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
 
+model.Base.metadata.create_all(bind=engine)
 
 load_dotenv()
 
@@ -38,7 +41,6 @@ class Post(BaseModel):
     title: str
     content: str
     published: bool = True
-    rating: Optional[int] = None
 
 
 @app.get("/", status_code=status.HTTP_200_OK)
@@ -47,14 +49,14 @@ async def root():
 
 
 @app.get("/posts", status_code=status.HTTP_200_OK)
-async def get_posts():
+async def get_posts(db: Session = Depends(get_db)):
     cursor.execute("""SELECT * FROM posts""")
     posts = cursor.fetchall()
     return {"data": posts}
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-async def set_post(post: Post):
+async def set_post(post: Post, db: Session = Depends(get_db)):
     cursor.execute(
         """ INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """,
         (
@@ -69,7 +71,7 @@ async def set_post(post: Post):
 
 
 @app.get("/posts/{id}", status_code=status.HTTP_200_OK)
-async def get_post(id: int):
+async def get_post(id: int, db: Session = Depends(get_db)):
     cursor.execute(""" SELECT * FROM posts WHERE posts.id = %s """, (str(id),))
     post = cursor.fetchone()
     if post is None:
@@ -82,7 +84,7 @@ async def get_post(id: int):
 
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_post(id: int):
+async def delete_post(id: int, db: Session = Depends(get_db)):
     cursor.execute(
         """ DELETE FROM posts WHERE posts.id = %s  RETURNING *""", (str(id),)
     )
@@ -98,7 +100,7 @@ async def delete_post(id: int):
 
 
 @app.put("/posts/{id}", status_code=status.HTTP_200_OK)
-async def update_post(id: int, updated_post: Post):
+async def update_post(id: int, updated_post: Post, db: Session = Depends(get_db)):
     cursor.execute(
         """ UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING * """,
         (
