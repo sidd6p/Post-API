@@ -53,5 +53,5 @@ def get_current_user(
     token: str = Depends(oauth2_schema), db: Session = Depends(database.get_db)
 ):
     token_data = verify_access_toke(token)
-    user = db.query(models.User).filter(models.User.id == token_data.id).first()
-    return user
+    user_id = db.query(models.User).filter(models.User.id == token_data.id).first().id
+    return user_id

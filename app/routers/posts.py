@@ -21,10 +21,10 @@ async def get_posts(db: Session = Depends(database.get_db)):
 async def set_post(
     post: schemas.PostCreate,
     db: Session = Depends(database.get_db),
-    user: int = Depends(oauth2.get_current_user),
+    user_id: int = Depends(oauth2.get_current_user),
 ):
     new_post = models.Post(**post.model_dump())
-    new_post.owner_id = user.id
+    new_post.owner_id = user_id
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
@@ -52,7 +52,7 @@ async def update_post(
     id: int,
     updated_post: schemas.PostUpdate,
     db: Session = Depends(database.get_db),
-    user: int = Depends(oauth2.get_current_user),
+    user_id: int = Depends(oauth2.get_current_user),
 ):
     post = db.query(models.Post).filter(models.Post.id == id)
 
@@ -61,10 +61,10 @@ async def update_post(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post with id: {id} not found!",
         )
-    elif user.id != post.first().owner_id:
+    elif user_id != post.first().owner_id:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"You can delete only your posts",
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You can update only your posts",
         )
     else:
         post.update(updated_post.model_dump(), synchronize_session=False)
@@ -76,7 +76,7 @@ async def update_post(
 async def delete_post(
     id: int,
     db: Session = Depends(database.get_db),
-    user: int = Depends(oauth2.get_current_user),
+    user_id: int = Depends(oauth2.get_current_user),
 ):
     post = db.query(models.Post).filter(models.Post.id == id)
 
@@ -85,9 +85,9 @@ async def delete_post(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post with id: {id} not found!",
         )
-    elif user.id != post.first().owner_id:
+    elif user_id != post.first().owner_id:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail=f"You can delete only your posts",
         )
     else:
