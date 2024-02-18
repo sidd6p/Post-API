@@ -1,5 +1,5 @@
 import time
-from sqlalchemy import Column, Integer, String, Boolean, DATE
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from .database import Base
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
@@ -14,6 +14,9 @@ class Post(Base):
     published = Column(Boolean, nullable=False, server_default="True")
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+    owner_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
 
 

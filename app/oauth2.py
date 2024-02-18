@@ -32,16 +32,14 @@ def verify_access_toke(token: str):
             key=os.getenv("SECRET_KEY"),
             algorithms=[os.getenv("ALGORITHM")],
         )
-        id: str = payload.get("id")
-
-        if id is None:
+        token_data = schemas.TokenDataBase(id=payload.get("id"))
+        if token_data.id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Cannot validate the access token",
                 headers={"WWW-Authenticate": "Bearer"},
             )
         else:
-            token_data = schemas.TokenDataBase(id=id)
             return token_data
     except JWTError:
         raise HTTPException(
