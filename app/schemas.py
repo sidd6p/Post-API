@@ -17,14 +17,15 @@ class PostUpdate(PostBase):
     pass
 
 
+class UserBase(BaseModel):
+    email: EmailStr
+
+
 class PostResponse(PostBase):
     created_at: datetime
     owner_id: int
     id: int
-
-
-class UserBase(BaseModel):
-    email: EmailStr
+    owner: UserBase
 
 
 class UserCreate(UserBase):
