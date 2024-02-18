@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sddwef@gmail.com\",\r\n    \"password\": \"This is Post 23\"\r\n}",
+							"raw": "{\r\n    \"email\": \"sidd@gmail.com\",\r\n    \"password\": \"12qw!@QW\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -81,13 +81,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/posts/7",
+							"raw": "{{base_url}}/posts/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"posts",
-								"7"
+								"3"
 							]
 						}
 					},
@@ -145,13 +145,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/posts/6",
+							"raw": "{{base_url}}/posts/4",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"posts",
-								"6"
+								"4"
 							]
 						}
 					},
@@ -174,7 +174,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Updated Post 8\",\r\n    \"content\": \"Updated This is Post 111\"\r\n}",
+							"raw": "{\r\n    \"title\": \"Updated Post 1\",\r\n    \"content\": \"Updated This is Post 111\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -182,13 +182,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/posts/13",
+							"raw": "{{base_url}}/posts/5",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"posts",
-								"13"
+								"5"
 							]
 						}
 					},
@@ -220,12 +220,12 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "sddwef@gmail.com",
+									"value": "sidd2@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "This is Post 23",
+									"value": "12qw!@QW",
 									"type": "text"
 								}
 							]
@@ -238,6 +238,47 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "Vote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post_id\": 3,\r\n    \"add_vote\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/votes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"votes"
 							]
 						}
 					},

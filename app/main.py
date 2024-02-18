@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from . import models, database
-from .routers import posts, users, auth
+from .routers import posts, users, auth, votes
 
 
 models.Base.metadata.create_all(bind=database.engine)
@@ -16,3 +16,4 @@ async def root():
 app.include_router(posts.router)
 app.include_router(users.router)
 app.include_router(auth.router)
+app.include_router(votes.router)
