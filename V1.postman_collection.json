@@ -15,15 +15,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/users/3",
-							"protocol": "http",
+							"raw": "{{base_url}}/users/3",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"users",
 								"3"
@@ -47,15 +42,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/users",
-							"protocol": "http",
+							"raw": "{{base_url}}/users",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"users"
 							]
@@ -74,15 +64,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/posts",
-							"protocol": "http",
+							"raw": "{{base_url}}/posts",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"posts"
 							]
@@ -96,15 +81,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/posts/7",
-							"protocol": "http",
+							"raw": "{{base_url}}/posts/7",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"posts",
 								"7"
@@ -117,16 +97,17 @@
 					"name": "Posts",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cGlyZXNfYXQiOiIyMDI0LTAyLTE3IDIwOjI4OjQxLjk1MTYyNSJ9.qBL4_YXmJKpW8vm2MzWZYZeHCbDYP5Yr3gp1a_hmX9k",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"title\": \"Post 1\",\r\n    \"content\": \"This is Post 23\",\r\n    \"published\": false\r\n}",
@@ -137,15 +118,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/posts",
-							"protocol": "http",
+							"raw": "{{base_url}}/posts",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"posts"
 							]
@@ -161,7 +137,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cGlyZXNfYXQiOiIyMDI0LTAyLTE3IDIwOjI4OjQxLjk1MTYyNSJ9.qBL4_YXmJKpW8vm2MzWZYZeHCbDYP5Yr3gp1a_hmX9k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -169,18 +145,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/posts/2",
-							"protocol": "http",
+							"raw": "{{base_url}}/posts/6",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"posts",
-								"2"
+								"6"
 							]
 						}
 					},
@@ -194,7 +165,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cGlyZXNfYXQiOiIyMDI0LTAyLTE3IDIwOjI4OjQxLjk1MTYyNSJ9.qBL4_YXmJKpW8vm2MzWZYZeHCbDYP5Yr3gp1a_hmX9k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -211,15 +182,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/posts/13",
-							"protocol": "http",
+							"raw": "{{base_url}}/posts/13",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"posts",
 								"13"
@@ -235,6 +201,17 @@
 			"item": [
 				{
 					"name": "Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"JWT\", pm.response.json().access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -254,15 +231,10 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/auth/login",
-							"protocol": "http",
+							"raw": "{{base_url}}/auth/login",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"auth",
 								"login"
@@ -279,15 +251,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000",
-					"protocol": "http",
+					"raw": "{{base_url}}",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000"
+						"{{base_url}}"
+					]
 				}
 			},
 			"response": []
