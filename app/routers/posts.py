@@ -2,13 +2,14 @@ from typing import List, Optional
 from fastapi import status, HTTPException, Depends, Response, APIRouter
 from sqlalchemy.orm import Session
 from .. import schemas, models, database, oauth2
-
+from sqlalchemy import func
+import json
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
 @router.get(
-    "/", status_code=status.HTTP_200_OK, response_model=List[schemas.PostResponse]
+    "/", status_code=status.HTTP_200_OK, response_model=List[schemas.PostResponseBase]
 )
 async def get_posts(
     db: Session = Depends(database.get_db),
@@ -27,7 +28,7 @@ async def get_posts(
 
 
 @router.post(
-    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse
+    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponseBase
 )
 async def set_post(
     post: schemas.PostCreate,
@@ -43,10 +44,11 @@ async def set_post(
 
 
 @router.get(
-    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
+    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponseBase
 )
 async def get_post(id: int, db: Session = Depends(database.get_db)):
     post = db.query(models.Post).filter(models.Post.id == id).first()
+
     if post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -57,7 +59,7 @@ async def get_post(id: int, db: Session = Depends(database.get_db)):
 
 
 @router.put(
-    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponse
+    "/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostResponseBase
 )
 async def update_post(
     id: int,

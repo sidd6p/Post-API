@@ -22,11 +22,16 @@ class UserBase(BaseModel):
     email: EmailStr
 
 
-class PostResponse(PostBase):
+class PostResponseBase(PostBase):
     created_at: datetime
     owner_id: int
     id: int
     owner: UserBase
+
+
+class PostVoteResponse(PostResponseBase):
+    post: PostResponseBase
+    votes: int
 
 
 class UserCreate(UserBase):
