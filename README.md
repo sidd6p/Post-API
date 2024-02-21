@@ -1,5 +1,7 @@
 # Post-API
 
+__[Live](http://146.190.115.182/)__
+
 ![image](https://github.com/sidd6p/Post-API/assets/91800813/aa81483f-b1f1-4ad9-8c71-10ea3542da01)
 
 
@@ -10,27 +12,22 @@
 - Clone the project
 
 ```bash
-  git clone https://github.com/sidd6p/AWS-Image-Classification.git
+   https://github.com/sidd6p/Post-API.git
 ```
 
-- Go to the AWS-Image-Classification/CMD-Line directory
+- Go to the Post-AP directory
 ```bash
-  cd AWS-Image-Classification/CMD-Line 
+   cd Post-AP
 
 ```
 - Install requirements
 ```bash 
-    pip install -r requirements.txt
+   pip install -r requirements.txt
 ```
-- Train Model
+- Run the API
 ```bash 
-    python train.py data_dir 
+   uvicorn app.main:app 
 ```
-- Make Prediction
-```bash 
-    python predict.py <path_to_image_file>/file_name <path_to_checkpoint_file>/checkpoint.pth
-```
-
 
 
 __[Siddhartha Purwar](https://www.linkedin.com/in/siddp6/)__
