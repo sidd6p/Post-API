@@ -8,7 +8,7 @@ Group=sidd
 WorkingDirectory=/home/sidd/app/Post-API
 Environment="PATH=/home/sidd/app/Post-API/venv/bin"
 EnvironmentFile=/home/sidd/.env
-ExecStart=/home/sidd/app/Post-API/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+ExecStart=/home/sidd/app/Post-API/venv/bin/gunicorn -w 1 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
 
 [Install]
 WantedBy=multi-user.target
