@@ -1,6 +1,6 @@
 # Post-API
 
-__[Live](http://146.190.115.182/)__
+__[Live](http://146.190.115.182/docs)__
 
 ![image](https://github.com/sidd6p/Post-API/assets/91800813/aa81483f-b1f1-4ad9-8c71-10ea3542da01)
 
