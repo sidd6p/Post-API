@@ -1,0 +1,26 @@
+version: '3'
+services:
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    environment:
+      - DB_HOST=postgres
+      - DB_PASSWORD=password123
+ 
+  
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=Post-DB
+    
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db: 
