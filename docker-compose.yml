@@ -11,6 +11,8 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_PASSWORD=password123
+    volumes:
+      - ./:/usr/src/app:ro
  
   
   postgres:
