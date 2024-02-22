@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  v1:
     build: .
     depends_on:
       - postgres
