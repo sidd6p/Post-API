@@ -1,5 +1,4 @@
 from app.schemas import UserResponse
-from .setup import client, session
 from fastapi import status
 
 

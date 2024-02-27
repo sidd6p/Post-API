@@ -1,5 +1,4 @@
 from fastapi import status
-from .setup import client, session
 
 
 def test_root(client):
