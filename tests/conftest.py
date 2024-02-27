@@ -1,8 +1,11 @@
 import pytest
 
 from fastapi.testclient import TestClient
+from fastapi import status
+
 from app.main import app
 from app import database
+from app.oauth2 import create_access_token
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -45,4 +48,16 @@ def test_user(client):
     )
     new_user = res.json()
     new_user["password"] = "12qw!@QW"
+    assert res.status_code == status.HTTP_201_CREATED
     yield new_user
+
+
+@pytest.fixture(scope="module")
+def test_token(test_user):
+    yield create_access_token({"id": test_user["id"]})
+
+
+@pytest.fixture(scope="module")
+def authorized_client(client, test_token):
+    client.headers["Authorization"] = f"Bearer {test_token}"
+    yield client
