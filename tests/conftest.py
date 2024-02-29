@@ -81,3 +81,5 @@ def test_posts(test_user, session):
     posts = list(post_map)
     session.add_all(posts)
     session.commit()
+
+    return posts_data
