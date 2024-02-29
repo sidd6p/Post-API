@@ -6,6 +6,7 @@ from fastapi import status
 from app.main import app
 from app import database
 from app.oauth2 import create_access_token
+from app import models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -61,3 +62,22 @@ def test_token(test_user):
 def authorized_client(client, test_token):
     client.headers["Authorization"] = f"Bearer {test_token}"
     yield client
+
+
+def create_posts(data):
+    return models.Post(**data)
+
+
+@pytest.fixture(scope="module")
+def test_posts(test_user, session):
+    posts_data = [
+        {"title": "Post 1", "content": "Post 1 content", "owner_id": test_user["id"]},
+        {"title": "Post 2", "content": "Post 2 content", "owner_id": test_user["id"]},
+        {"title": "Post 3", "content": "Post 3 content", "owner_id": test_user["id"]},
+        {"title": "Post 4", "content": "Post 4 content", "owner_id": test_user["id"]},
+        {"title": "Post 5", "content": "Post 5 content", "owner_id": test_user["id"]},
+    ]
+    post_map = map(create_posts, posts_data)
+    posts = list(post_map)
+    session.add_all(posts)
+    session.commit()
