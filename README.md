@@ -2,7 +2,7 @@
 
 🌐 __[Live Sever](http://146.190.115.182/docs)__ 
 
-🐳 __[Docker Rep](https://hub.docker.com/r/siddp6/post-api)__   
+🐳 __[Docker Rep](https://hub.docker.com/r/sidd6p/public-post-api)__   
 
 📬 __[Postman Workspace](https://www.postman.com/science-geologist-6321970/workspace/post-api-app)__
 
