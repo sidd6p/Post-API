@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  Setup: 
+  Build: 
     runs-on: ubuntu-latest
     env:
       DB_HOST: ${{secrets.DB_HOST}}
@@ -30,11 +30,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - name: Check Ubuntu
         run: echo "Hello Earth from Ubuntu!"
+     
       - name: Pull the code
         uses: actions/checkout@v4
+     
       - name: Install Python 3.10
         uses: actions/setup-python@v5
         with:
@@ -66,3 +69,28 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/public-post-api:latest
+
+
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    environment:
+      name: production
+    steps:
+      - name: Check Ubuntu
+        run: echo "Hello Earth from Ubuntu!"
+      
+      - name: Pull the code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Ubuntu
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.UBUNTU_HOST }}
+          username: ${{ secrets.UBUNTU_USERNAME }}
+          password: ${{ secrets.UBUNTU_PASSWORD }}
+          script: |
+            cd home/sidd/app/Post-API
+            git pull
+            sudo systemctl restart post-ap 
+      
