@@ -1,0 +1,16 @@
+name: Build and Deploy Code
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  jobs1: 
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Pull the code
+        uses: actions/checkout@v4
+      - name:  Check Ununtu
+        run: echo "Hello Earth!"
+
