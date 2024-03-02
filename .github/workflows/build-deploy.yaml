@@ -7,16 +7,16 @@ on:
 
 jobs:
   Setup: 
-    env:
-      DB_HOST: localhost
-      DB: Post-DB
-      TEST_DB: Action-Post-DB
-      DB_USER: postgres
-      DB_PASSWORD: sd34EgRiv
-      SECRET_KEY: gtydcdeg38920304GHUJN4567b99FEgRSD567
-      JWT_ALGORITHM: HS256
-      JWT_EXPIRATION_TIME_IN_MINUTE: 30
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{secrets.localhost}}
+      DB: ${{secrets.Post-DB}}
+      TEST_DB: ${{secrets.Action-Post-DB}}
+      DB_USER: ${{secrets.secrets.DB_USER}}
+      DB_PASSWORD: ${{secrets.secrets.DB_PASSWORD}}
+      SECRET_KEY: ${{secrets.secrets.SECRET_KEY}}
+      JWT_ALGORITHM: ${{secrets.HS256}}
+      JWT_EXPIRATION_TIME_IN_MINUTE: ${{secrets.30}}
     steps:
       - name: Check Ubuntu
         run: echo "Hello Earth from Ubuntu!"
