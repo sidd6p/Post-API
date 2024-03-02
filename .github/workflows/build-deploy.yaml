@@ -6,11 +6,22 @@ on:
       - main
 
 jobs:
-  jobs1: 
+  Setup: 
     runs-on:  ubuntu-latest
     steps:
+      - name:  Check Ununtu
+        run: echo "Hello Earth from Ubuntu!"
       - name: Pull the code
         uses: actions/checkout@v4
-      - name:  Check Ununtu
-        run: echo "Hello Earth!"
+      - name: Install Python 3.10
+        uses: actions/setup-python@v5
+          with: 
+            python-version: '3.10'
+      - name: Update pip
+        run: python -m pip install --upgrade
+      - name: Install Dependence
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest -v -s --disable-warnings -x
+
 
