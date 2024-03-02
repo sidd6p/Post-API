@@ -8,14 +8,14 @@ on:
 jobs:
   Setup: 
     env:
-      DB_HOST=localhost
-      DB=Post-DB
-      TEST_DB=Action-Post-DB
-      DB_USER=postgres
-      DB_PASSWORD=sd34EgRiv
-      SECRET_KEY=gtydcdeg38920304GHUJN4567b99FEgRSD567
-      JWT_ALGORITHM=HS256
-      JWT_EXPIRATION_TIME_IN_MINUTE=30
+      DB_HOST: localhost
+      DB: Post-DB
+      TEST_DB: Action-Post-DB
+      DB_USER: postgres
+      DB_PASSWORD: sd34EgRiv
+      SECRET_KEY: gtydcdeg38920304GHUJN4567b99FEgRSD567
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRATION_TIME_IN_MINUTE: 30
     runs-on: ubuntu-latest
     steps:
       - name: Check Ubuntu
