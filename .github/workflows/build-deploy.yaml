@@ -90,7 +90,7 @@ jobs:
           username: ${{ secrets.UBUNTU_USERNAME }}
           password: ${{ secrets.UBUNTU_PASSWORD }}
           script: |
-            cd home/sidd/app/Post-API
+            cd ~/app/Post-API
             git pull
             echo ${{ secrets.UBUNTU_PASSWORD }} | sudo -S systemctl restart post-api
       
