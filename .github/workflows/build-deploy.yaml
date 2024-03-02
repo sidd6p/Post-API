@@ -92,5 +92,5 @@ jobs:
           script: |
             cd home/sidd/app/Post-API
             git pull
-            sudo systemctl restart post-ap 
+            echo ${{ secrets.UBUNTU_PASSWORD }} | sudo systemctl restart post-ap 
       
